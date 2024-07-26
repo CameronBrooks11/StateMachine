@@ -66,22 +66,22 @@ State* S0 = machine.addState([](){
     Serial.println("Execute Once");
     digitalWrite(LED,!digitalRead(LED));
   }
-});;
+}, "State 0");
 
 /*
  * The other way to define states.
  * (Looks cleaner)
  * Functions must be defined in the sketch
  */
-State* S1 = machine.addState(&state1);
-State* S2 = machine.addState(&state2);
-State* S3 = machine.addState(&state3);
-State* S4 = machine.addState(&state4);
-State* S5 = machine.addState(&state5);
+State* S1 = machine.addState(&state1, "State 1");
+State* S2 = machine.addState(&state2, "State 2");
+State* S3 = machine.addState(&state3, "State 3");
+State* S4 = machine.addState(&state4, "State 4");
+State* S5 = machine.addState(&state5, "State 5");
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED,OUTPUT);
+  pinMode(LED, OUTPUT);
   randomSeed(A0);
 
   /*
@@ -94,31 +94,32 @@ void setup() {
    * Initially points to itself.
    */
   S0->addTransition([](){
-    randomState = random(0,6);
+    randomState = random(0, 6);
     Serial.print("Transitioning to random state ");
     Serial.println(randomState);
-    S0->setTransition(0,randomState);
+    S0->setTransition(0, randomState);
     return true;
-  },S0);
+  }, S0);
 
   /*
-  * The other way to define transitions.
-  * (Looks cleaner)
-  * Functions must be defined in the sketch
-  */
-  S1->addTransition(&transitionS1S2,S2);
-  S2->addTransition(&transitionS2S3,S3);
-  S3->addTransition(&transitionS3S4,S4);
-  S4->addTransition(&transitionS4S5,S5);
-  S5->addTransition(&transitionS5S0,S0);
-  S5->addTransition(&transitionS5S2,S2);
+   * The other way to define transitions.
+   * (Looks cleaner)
+   * Functions must be defined in the sketch
+   */
+  S1->addTransition(&transitionS1S2, S2);
+  S2->addTransition(&transitionS2S3, S3);
+  S3->addTransition(&transitionS3S4, S4);
+  S4->addTransition(&transitionS4S5, S5);
+  S5->addTransition(&transitionS5S0, S0);
+  S5->addTransition(&transitionS5S2, S2);
 }
 
 void loop() {
   machine.run();
+  Serial.print(F("Using getCurrentStateName():" ));
+  Serial.println(machine.getCurrentStateName());
   delay(STATE_DELAY);
 }
-
 
 //=======================================
 
@@ -163,7 +164,7 @@ void state5(){
 }
 
 bool transitionS5S0(){
-  return random(0,2);
+  return random(0, 2);
 }
 
 bool transitionS5S2(){

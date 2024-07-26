@@ -1,6 +1,6 @@
 #include "State.h"
 
-State::State(){
+State::State(String name) : name(name) {
   transitions = new LinkedList<struct Transition*>();
 };
 
@@ -15,7 +15,7 @@ State::~State(){};
  * state is the state to transition to
  */
 void State::addTransition(bool (*conditionFunction)(), State* s){
-  struct Transition* t = new Transition{conditionFunction,s->index};
+  struct Transition* t = new Transition{conditionFunction, s->index};
   transitions->add(t);
 }
 
@@ -28,7 +28,7 @@ void State::addTransition(bool (*conditionFunction)(), State* s){
  * stateNumber is the number of the state to transition to
  */
 void State::addTransition(bool (*conditionFunction)(), int stateNumber){
-  struct Transition* t = new Transition{conditionFunction,stateNumber};
+  struct Transition* t = new Transition{conditionFunction, stateNumber};
   transitions->add(t);
 }
 
@@ -42,7 +42,7 @@ int State::evalTransitions(){
   if(transitions->size() == 0) return index;
   bool result = false;
   
-  for(int i=0;i<transitions->size();i++){
+  for(int i = 0; i < transitions->size(); i++){
     result = transitions->get(i)->conditionFunction();
     if(result == true){
       return transitions->get(i)->stateNumber;
@@ -65,7 +65,7 @@ int State::execute(){
  * Method to dynamically set a transition
  */
 int State::setTransition(int index, int stateNo){
-	if(transitions->size() == 0) return -1;
-	transitions->get(index)->stateNumber = stateNo;
-	return stateNo;
+  if(transitions->size() == 0) return -1;
+  transitions->get(index)->stateNumber = stateNo;
+  return stateNo;
 }

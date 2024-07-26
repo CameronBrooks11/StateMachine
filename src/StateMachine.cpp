@@ -8,13 +8,13 @@ StateMachine::~StateMachine(){};
 
 /*
  * Main execution of the machine occurs here in run
- * The current state is executed and it's transitions are evaluated
+ * The current state is executed and its transitions are evaluated
  * to determine the next state. 
  * 
  * By design, only one state is executed in one loop() cycle.
  */
 void StateMachine::run(){
-  //Serial.println("StateMachine::run()");
+  // Serial.println("StateMachine::run()");
   // Early exit, no states are defined
   if(stateList->size() == 0) return;
 
@@ -25,12 +25,12 @@ void StateMachine::run(){
   
   // Execute state logic and return transitioned
   // to state number. Remember the current state then check
-  // if it wasnt't changed in state logic. If it was, we 
+  // if it wasn't changed in state logic. If it was, we 
   // should ignore predefined transitions.
   int initialState = currentState;
   int next = stateList->get(currentState)->execute();
   if(initialState == currentState){
-    executeOnce = (currentState == next)?false:true;
+    executeOnce = (currentState == next) ? false : true;
     currentState = next;
   }
 }
@@ -39,11 +39,11 @@ void StateMachine::run(){
  * Adds a state to the machine
  * It adds the state in sequential order.
  */
-State* StateMachine::addState(void(*functionPointer)()){
-  State* s = new State();
+State* StateMachine::addState(void(*functionPointer)(), String name){
+  State* s = new State(name);
   s->stateLogic = functionPointer;
   stateList->add(s);
-  s->index = stateList->size()-1;
+  s->index = stateList->size() - 1;
   return s;
 }
 
@@ -63,9 +63,19 @@ State* StateMachine::transitionTo(State* s){
  */
 int StateMachine::transitionTo(int i){
   if(i < stateList->size()){
-	this->currentState = i;
-	this->executeOnce = true;
-	return i;
+    this->currentState = i;
+    this->executeOnce = true;
+    return i;
   }
   return currentState;
+}
+
+/*
+ * Get the name of the current state.
+ */
+String StateMachine::getCurrentStateName(){
+  if(currentState != -1 && currentState < stateList->size()){
+    return stateList->get(currentState)->name;
+  }
+  return "No State";
 }
