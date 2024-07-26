@@ -46,6 +46,7 @@
  *  Project's page: https://github.com/jrullan/StateMachine
  *  License: MIT
  ****************************************************************/
+
 #include <StateMachine.h>
 
 const int STATE_DELAY = 1000;
@@ -64,7 +65,7 @@ State* S0 = machine.addState([](){
   Serial.println("State 0, anonymous function");
   if(machine.executeOnce){
     Serial.println("Execute Once");
-    digitalWrite(LED,!digitalRead(LED));
+    digitalWrite(LED, !digitalRead(LED));
   }
 }, "State 0");
 
@@ -116,9 +117,17 @@ void setup() {
 
 void loop() {
   machine.run();
-  Serial.print(F("Using getCurrentStateName():" ));
-  Serial.println(machine.getCurrentStateName());
+  Serial.print(F("Using getCurrentState(): "));
+  Serial.println(getCurrentStateName(machine.getCurrentState()));
   delay(STATE_DELAY);
+}
+
+// Helper function to get the name of the current state
+String getCurrentStateName(State* state) {
+  if (state != nullptr) {
+    return state->name;
+  }
+  return "No State";
 }
 
 //=======================================
