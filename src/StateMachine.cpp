@@ -71,11 +71,11 @@ int StateMachine::transitionTo(int i){
 }
 
 /*
- * Get the name of the current state.
+ * Get the current state object.
  */
-String StateMachine::getCurrentStateName(){
+State* StateMachine::getCurrentState(){
   if(currentState != -1 && currentState < stateList->size()){
-    return stateList->get(currentState)->name;
+    return stateList->get(currentState);
   }
-  return "No State";
+  return nullptr;
 }

@@ -20,8 +20,11 @@ class StateMachine
     State* transitionTo(State* s);
     int transitionTo(int i);
     
-    // Add method to get the name of the current state
+    // Add methods to get the current state and state by index
     String getCurrentStateName();
+    State* getCurrentState();
+    State* getState(int index);
+    State* getState(String name);
     
     // Attributes
     LinkedList<State*> *stateList;
